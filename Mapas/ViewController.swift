@@ -23,14 +23,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.startUpdatingLocation()
+        
+       
     }
     
     @IBAction func verCoordenadasBtn(_ sender: UIBarButtonItem) {
         let alerta = UIAlertController(title: "Ubicacion", message: "Las coordenadas son, lat: \(self.latitud!) long: \(self.longitud!)", preferredStyle: .alert )
         let accionAceptar = UIAlertAction(title: "Aceptar", style: .default, handler: nil)
-        let accionCancelar = UIAlertAction(title: "Ver mas...", style: .default, handler: nil)
+        //let accionVerMas = UIAlertAction(title: "Ver mas...", style: .default, handler: nil)
+        let accionVerMas = UIAlertAction(title: "Ver Mas...", style: .default) { (_) in
+            let localizacion = CLLocationCoordinate2DMake(self.latitud, self.longitud)
+            let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            let region = MKCoordinateRegion(center: localizacion, span: span)
+            self.Mapa.setRegion(region, animated: true)
+            self.Mapa.showsUserLocation = true
+        }
+        
         alerta.addAction(accionAceptar)
-        alerta.addAction(accionCancelar)
+        alerta.addAction(accionVerMas)
         present(alerta, animated: true, completion: nil)
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
